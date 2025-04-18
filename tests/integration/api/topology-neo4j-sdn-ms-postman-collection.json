@@ -1,0 +1,570 @@
+{
+    "info": {
+      "_postman_id": "3f5e7d9c-7a9b-11ee-8c90-0242ac120002",
+      "name": "Topology Neo4j SDN Microservice",
+      "description": "Collection for testing the Topology Neo4j SDN Microservice",
+      "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+      "_exporter_id": "0"
+    },
+    "item": [
+      {
+        "name": "Nodes",
+        "item": [
+          {
+            "name": "Create Node",
+            "event": [
+              {
+                "listen": "test",
+                "script": {
+                  "exec": [
+                    "pm.test(\"Status code is 201\", function () {",
+                    "    pm.response.to.have.status(201);",
+                    "});",
+                    "",
+                    "pm.test(\"Response has correct structure\", function () {",
+                    "    const responseJson = pm.response.json();",
+                    "    pm.expect(responseJson).to.have.property('id');",
+                    "    pm.expect(responseJson).to.have.property('type');",
+                    "    pm.expect(responseJson).to.have.property('properties');",
+                    "    ",
+                    "    // Save the node ID for later use",
+                    "    pm.environment.set('nodeId', responseJson.id);",
+                    "});"
+                  ],
+                  "type": "text/javascript"
+                }
+              }
+            ],
+            "request": {
+              "method": "POST",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": {
+                "mode": "raw",
+                "raw": "{\n    \"type\": \"ITEM:NETWORK_ELEMENT:SWRT\",\n    \"properties\": {\n        \"name\": \"Switch Router 1\",\n        \"ipAddress\": \"192.168.1.1\",\n        \"status\": \"ACTIVE\"\n    }\n}"
+              },
+              "url": {
+                "raw": "{{baseUrl}}/api/nodes",
+                "host": [
+                  "{{baseUrl}}"
+                ],
+                "path": [
+                  "api",
+                  "nodes"
+                ]
+              },
+              "description": "Create a new node with dynamic labels"
+            },
+            "response": []
+          },
+          {
+            "name": "Get All Nodes",
+            "event": [
+              {
+                "listen": "test",
+                "script": {
+                  "exec": [
+                    "pm.test(\"Status code is 200\", function () {",
+                    "    pm.response.to.have.status(200);",
+                    "});",
+                    "",
+                    "pm.test(\"Response is an array\", function () {",
+                    "    const responseJson = pm.response.json();",
+                    "    pm.expect(Array.isArray(responseJson)).to.be.true;",
+                    "});"
+                  ],
+                  "type": "text/javascript"
+                }
+              }
+            ],
+            "request": {
+              "method": "GET",
+              "header": [],
+              "url": {
+                "raw": "{{baseUrl}}/api/nodes",
+                "host": [
+                  "{{baseUrl}}"
+                ],
+                "path": [
+                  "api",
+                  "nodes"
+                ]
+              },
+              "description": "Get all nodes from the database"
+            },
+            "response": []
+          },
+          {
+            "name": "Get Node By ID",
+            "event": [
+              {
+                "listen": "test",
+                "script": {
+                  "exec": [
+                    "pm.test(\"Status code is 200\", function () {",
+                    "    pm.response.to.have.status(200);",
+                    "});",
+                    "",
+                    "pm.test(\"Response has correct structure\", function () {",
+                    "    const responseJson = pm.response.json();",
+                    "    pm.expect(responseJson).to.have.property('id');",
+                    "    pm.expect(responseJson).to.have.property('type');",
+                    "    pm.expect(responseJson).to.have.property('properties');",
+                    "});"
+                  ],
+                  "type": "text/javascript"
+                }
+              }
+            ],
+            "request": {
+              "method": "GET",
+              "header": [],
+              "url": {
+                "raw": "{{baseUrl}}/api/nodes/{{nodeId}}",
+                "host": [
+                  "{{baseUrl}}"
+                ],
+                "path": [
+                  "api",
+                  "nodes",
+                  "{{nodeId}}"
+                ]
+              },
+              "description": "Get a node by its ID"
+            },
+            "response": []
+          },
+          {
+            "name": "Update Node",
+            "event": [
+              {
+                "listen": "test",
+                "script": {
+                  "exec": [
+                    "pm.test(\"Status code is 200\", function () {",
+                    "    pm.response.to.have.status(200);",
+                    "});",
+                    "",
+                    "pm.test(\"Response has correct structure\", function () {",
+                    "    const responseJson = pm.response.json();",
+                    "    pm.expect(responseJson).to.have.property('id');",
+                    "    pm.expect(responseJson).to.have.property('type');",
+                    "    pm.expect(responseJson).to.have.property('properties');",
+                    "    ",
+                    "    // Verify the update was applied",
+                    "    pm.expect(responseJson.type).to.equal('ITEM:NETWORK_ELEMENT:ROUTER');",
+                    "    pm.expect(responseJson.properties.name).to.equal('Router 1');",
+                    "});"
+                  ],
+                  "type": "text/javascript"
+                }
+              }
+            ],
+            "request": {
+              "method": "PUT",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": {
+                "mode": "raw",
+                "raw": "{\n    \"type\": \"ITEM:NETWORK_ELEMENT:ROUTER\",\n    \"properties\": {\n        \"name\": \"Router 1\",\n        \"ipAddress\": \"192.168.1.1\",\n        \"status\": \"ACTIVE\"\n    }\n}"
+              },
+              "url": {
+                "raw": "{{baseUrl}}/api/nodes/{{nodeId}}",
+                "host": [
+                  "{{baseUrl}}"
+                ],
+                "path": [
+                  "api",
+                  "nodes",
+                  "{{nodeId}}"
+                ]
+              },
+              "description": "Update an existing node"
+            },
+            "response": []
+          },
+          {
+            "name": "Create Second Node",
+            "event": [
+              {
+                "listen": "test",
+                "script": {
+                  "exec": [
+                    "pm.test(\"Status code is 201\", function () {",
+                    "    pm.response.to.have.status(201);",
+                    "});",
+                    "",
+                    "pm.test(\"Response has correct structure\", function () {",
+                    "    const responseJson = pm.response.json();",
+                    "    pm.expect(responseJson).to.have.property('id');",
+                    "    pm.expect(responseJson).to.have.property('type');",
+                    "    pm.expect(responseJson).to.have.property('properties');",
+                    "    ",
+                    "    // Save the second node ID for later use in relationships",
+                    "    pm.environment.set('secondNodeId', responseJson.id);",
+                    "});"
+                  ],
+                  "type": "text/javascript"
+                }
+              }
+            ],
+            "request": {
+              "method": "POST",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": {
+                "mode": "raw",
+                "raw": "{\n    \"type\": \"ITEM:SERVER\",\n    \"properties\": {\n        \"name\": \"Server 1\",\n        \"ipAddress\": \"192.168.1.100\",\n        \"status\": \"ACTIVE\"\n    }\n}"
+              },
+              "url": {
+                "raw": "{{baseUrl}}/api/nodes",
+                "host": [
+                  "{{baseUrl}}"
+                ],
+                "path": [
+                  "api",
+                  "nodes"
+                ]
+              },
+              "description": "Create a second node for relationship testing"
+            },
+            "response": []
+          }
+        ],
+        "description": "Node management operations"
+      },
+      {
+        "name": "Relationships",
+        "item": [
+          {
+            "name": "Create Relationship",
+            "event": [
+              {
+                "listen": "test",
+                "script": {
+                  "exec": [
+                    "pm.test(\"Status code is 201\", function () {",
+                    "    pm.response.to.have.status(201);",
+                    "});",
+                    "",
+                    "pm.test(\"Response has correct structure\", function () {",
+                    "    const responseJson = pm.response.json();",
+                    "    pm.expect(responseJson).to.have.property('id');",
+                    "    pm.expect(responseJson).to.have.property('type');",
+                    "    pm.expect(responseJson).to.have.property('sourceNodeId');",
+                    "    pm.expect(responseJson).to.have.property('targetNodeId');",
+                    "    ",
+                    "    // Save the relationship ID for later use",
+                    "    pm.environment.set('relationshipId', responseJson.id);",
+                    "});"
+                  ],
+                  "type": "text/javascript"
+                }
+              }
+            ],
+            "request": {
+              "method": "POST",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": {
+                "mode": "raw",
+                "raw": "{\n    \"type\": \"CONNECTS_TO\",\n    \"sourceNodeId\": {{nodeId}},\n    \"targetNodeId\": {{secondNodeId}}\n}"
+              },
+              "url": {
+                "raw": "{{baseUrl}}/api/relationships",
+                "host": [
+                  "{{baseUrl}}"
+                ],
+                "path": [
+                  "api",
+                  "relationships"
+                ]
+              },
+              "description": "Create a new relationship between two nodes"
+            },
+            "response": []
+          },
+          {
+            "name": "Get All Relationships",
+            "event": [
+              {
+                "listen": "test",
+                "script": {
+                  "exec": [
+                    "pm.test(\"Status code is 200\", function () {",
+                    "    pm.response.to.have.status(200);",
+                    "});",
+                    "",
+                    "pm.test(\"Response is an array\", function () {",
+                    "    const responseJson = pm.response.json();",
+                    "    pm.expect(Array.isArray(responseJson)).to.be.true;",
+                    "});"
+                  ],
+                  "type": "text/javascript"
+                }
+              }
+            ],
+            "request": {
+              "method": "GET",
+              "header": [],
+              "url": {
+                "raw": "{{baseUrl}}/api/relationships",
+                "host": [
+                  "{{baseUrl}}"
+                ],
+                "path": [
+                  "api",
+                  "relationships"
+                ]
+              },
+              "description": "Get all relationships from the database"
+            },
+            "response": []
+          },
+          {
+            "name": "Get Relationship By ID",
+            "event": [
+              {
+                "listen": "test",
+                "script": {
+                  "exec": [
+                    "pm.test(\"Status code is 200\", function () {",
+                    "    pm.response.to.have.status(200);",
+                    "});",
+                    "",
+                    "pm.test(\"Response has correct structure\", function () {",
+                    "    const responseJson = pm.response.json();",
+                    "    pm.expect(responseJson).to.have.property('id');",
+                    "    pm.expect(responseJson).to.have.property('type');",
+                    "    pm.expect(responseJson).to.have.property('sourceNodeId');",
+                    "    pm.expect(responseJson).to.have.property('targetNodeId');",
+                    "});"
+                  ],
+                  "type": "text/javascript"
+                }
+              }
+            ],
+            "request": {
+              "method": "GET",
+              "header": [],
+              "url": {
+                "raw": "{{baseUrl}}/api/relationships/{{relationshipId}}",
+                "host": [
+                  "{{baseUrl}}"
+                ],
+                "path": [
+                  "api",
+                  "relationships",
+                  "{{relationshipId}}"
+                ]
+              },
+              "description": "Get a relationship by its ID"
+            },
+            "response": []
+          },
+          {
+            "name": "Update Relationship",
+            "event": [
+              {
+                "listen": "test",
+                "script": {
+                  "exec": [
+                    "pm.test(\"Status code is 200\", function () {",
+                    "    pm.response.to.have.status(200);",
+                    "});",
+                    "",
+                    "pm.test(\"Response has correct structure\", function () {",
+                    "    const responseJson = pm.response.json();",
+                    "    pm.expect(responseJson).to.have.property('id');",
+                    "    pm.expect(responseJson).to.have.property('type');",
+                    "    pm.expect(responseJson).to.have.property('sourceNodeId');",
+                    "    pm.expect(responseJson).to.have.property('targetNodeId');",
+                    "    ",
+                    "    // Verify the update was applied",
+                    "    pm.expect(responseJson.type).to.equal('CONNECTED_TO');",
+                    "});"
+                  ],
+                  "type": "text/javascript"
+                }
+              }
+            ],
+            "request": {
+              "method": "PUT",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": {
+                "mode": "raw",
+                "raw": "{\n    \"type\": \"CONNECTED_TO\",\n    \"sourceNodeId\": {{nodeId}},\n    \"targetNodeId\": {{secondNodeId}}\n}"
+              },
+              "url": {
+                "raw": "{{baseUrl}}/api/relationships/{{relationshipId}}",
+                "host": [
+                  "{{baseUrl}}"
+                ],
+                "path": [
+                  "api",
+                  "relationships",
+                  "{{relationshipId}}"
+                ]
+              },
+              "description": "Update an existing relationship"
+            },
+            "response": []
+          }
+        ],
+        "description": "Relationship management operations"
+      },
+      {
+        "name": "Cleanup",
+        "item": [
+          {
+            "name": "Delete Relationship",
+            "event": [
+              {
+                "listen": "test",
+                "script": {
+                  "exec": [
+                    "pm.test(\"Status code is 204\", function () {",
+                    "    pm.response.to.have.status(204);",
+                    "});"
+                  ],
+                  "type": "text/javascript"
+                }
+              }
+            ],
+            "request": {
+              "method": "DELETE",
+              "header": [],
+              "url": {
+                "raw": "{{baseUrl}}/api/relationships/{{relationshipId}}",
+                "host": [
+                  "{{baseUrl}}"
+                ],
+                "path": [
+                  "api",
+                  "relationships",
+                  "{{relationshipId}}"
+                ]
+              },
+              "description": "Delete a relationship by its ID"
+            },
+            "response": []
+          },
+          {
+            "name": "Delete First Node",
+            "event": [
+              {
+                "listen": "test",
+                "script": {
+                  "exec": [
+                    "pm.test(\"Status code is 204\", function () {",
+                    "    pm.response.to.have.status(204);",
+                    "});"
+                  ],
+                  "type": "text/javascript"
+                }
+              }
+            ],
+            "request": {
+              "method": "DELETE",
+              "header": [],
+              "url": {
+                "raw": "{{baseUrl}}/api/nodes/{{nodeId}}",
+                "host": [
+                  "{{baseUrl}}"
+                ],
+                "path": [
+                  "api",
+                  "nodes",
+                  "{{nodeId}}"
+                ]
+              },
+              "description": "Delete a node by its ID"
+            },
+            "response": []
+          },
+          {
+            "name": "Delete Second Node",
+            "event": [
+              {
+                "listen": "test",
+                "script": {
+                  "exec": [
+                    "pm.test(\"Status code is 204\", function () {",
+                    "    pm.response.to.have.status(204);",
+                    "});"
+                  ],
+                  "type": "text/javascript"
+                }
+              }
+            ],
+            "request": {
+              "method": "DELETE",
+              "header": [],
+              "url": {
+                "raw": "{{baseUrl}}/api/nodes/{{secondNodeId}}",
+                "host": [
+                  "{{baseUrl}}"
+                ],
+                "path": [
+                  "api",
+                  "nodes",
+                  "{{secondNodeId}}"
+                ]
+              },
+              "description": "Delete a node by its ID"
+            },
+            "response": []
+          }
+        ],
+        "description": "Cleanup operations to remove test data"
+      }
+    ],
+    "event": [
+      {
+        "listen": "prerequest",
+        "script": {
+          "type": "text/javascript",
+          "exec": [
+            ""
+          ]
+        }
+      },
+      {
+        "listen": "test",
+        "script": {
+          "type": "text/javascript",
+          "exec": [
+            ""
+          ]
+        }
+      }
+    ],
+    "variable": [
+      {
+        "key": "baseUrl",
+        "value": "http://localhost:8080",
+        "type": "string"
+      }
+    ]
+  }

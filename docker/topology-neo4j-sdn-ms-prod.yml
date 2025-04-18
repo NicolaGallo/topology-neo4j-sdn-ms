@@ -1,0 +1,15 @@
+version: '3.8'
+
+services:
+  topology-neo4j-sdn-ms:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    container_name: topology-neo4j-sdn-ms
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_PROFILES_ACTIVE=prod
+      - NEO4J_URI=${NEO4J_URI}
+      - NEO4J_USERNAME=${NEO4J_USERNAME}
+      - NEO4J_PASSWORD=${NEO4J_PASSWORD}

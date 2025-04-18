@@ -1,0 +1,27 @@
+service:
+  name: topology-neo4j-sdn-ms
+  description: Topology Neo4j SDN Microservice for MITO
+  version: 0.0.1-SNAPSHOT
+  module: topology
+
+neo4j:
+  local:
+    uri: bolt://localhost:7687
+    username: neo4j
+    password: password
+  prod:
+    uri: ${NEO4J_URI}
+    username: ${NEO4J_USERNAME}
+    password: ${NEO4J_PASSWORD}
+
+deployment:
+  registry: registry.example.com
+  namespace: mito
+  replicas: 2
+  resources:
+    requests:
+      cpu: 200m
+      memory: 512Mi
+    limits:
+      cpu: 500m
+      memory: 1Gi
