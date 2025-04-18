@@ -1,0 +1,112 @@
+# IDE-specific files
+.idea/
+*.iml
+*.ipr
+*.iws
+.vscode/
+*.code-workspace
+
+# Build output
+target/
+build/
+out/
+bin/
+
+# Compiled class files
+*.class
+
+# Package files
+*.jar
+*.war
+*.ear
+*.nar
+
+# Logs
+logs/
+*.log
+log/
+
+# Maven wrapper
+.mvn/
+mvnw
+mvnw.cmd
+
+# Gradle
+.gradle/
+gradle/
+
+# Environment files
+.env
+*.env
+.env.local
+.env.development
+.env.production
+
+# Dependency management
+node_modules/
+bower_components/
+
+# Temporary files
+*.tmp
+*.bak
+*.swp
+*~.nib
+tmp/
+
+# Backup files
+*.backup
+*.bkp
+
+# System files
+.DS_Store
+Thumbs.db
+
+# Spring Boot specific
+HELP.md
+
+# Neo4j specific
+neo4j_data/
+neo4j_logs/
+neo4j_import/
+neo4j_plugins/
+
+# Test reports and coverage
+surefire-reports/
+jacoco.exec
+*.class
+
+# Security
+secrets/
+*.pem
+*.key
+
+# JRebel
+rebel.xml
+rebel-remote.xml
+
+# Compliance and security scans
+.scannerwork/
+
+# Performance and profiling
+*.hprof
+
+# Eclipse specific
+.classpath
+.project
+.settings/
+
+# Locally stored "Eclipse launch configurations"
+*.launch
+
+# STS (Spring Tool Suite)
+.springBeans
+
+# NetBeans specific
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+
+# Kubernetes
+*.kubeconfig
