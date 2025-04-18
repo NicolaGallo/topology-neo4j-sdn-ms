@@ -7,7 +7,6 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.neo4j.core.schema.GeneratedValue;
 import org.springframework.data.neo4j.core.schema.Id;
 import org.springframework.data.neo4j.core.schema.RelationshipProperties;
-import org.springframework.data.neo4j.core.schema.TargetNode;
 
 @Data
 @Builder
@@ -15,15 +14,15 @@ import org.springframework.data.neo4j.core.schema.TargetNode;
 @AllArgsConstructor
 @RelationshipProperties
 public class Relationship {
-
     @Id
     @GeneratedValue
     private Long id;
 
-    private String type;
+    private Long relationshipId; // Aggiungi questo campo per memorizzare l'identity restituito da Neo4j
 
+    private String type;
     private Long sourceNodeId;
 
-    @TargetNode
-    private GraphNode targetNode;
+
+    private Long targetNodeId;
 }

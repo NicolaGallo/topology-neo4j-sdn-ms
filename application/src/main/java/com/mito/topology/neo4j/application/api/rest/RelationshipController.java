@@ -74,10 +74,10 @@ public class RelationshipController {
 
     private RelationshipDto mapToDto(Relationship relationship) {
         return RelationshipDto.builder()
-                .id(relationship.getId())
+                .id(relationship.getRelationshipId())  // Usa il nuovo campo
                 .type(relationship.getType())
                 .sourceNodeId(relationship.getSourceNodeId())
-                .targetNodeId(relationship.getTargetNode().getId())
+                .targetNodeId(relationship.getTargetNodeId() != null ? relationship.getTargetNodeId() : null)
                 .build();
     }
 }

@@ -14,19 +14,19 @@ public interface RelationshipRepository extends Neo4jRepository<Relationship, Lo
 
     @Query("MATCH (source) WHERE ID(source) = $sourceNodeId " +
            "MATCH (target) WHERE ID(target) = $targetNodeId " +
-           "CREATE (source)-[r:RELATED {type: $type}]->(target) " +
-           "RETURN ID(r) as id, r.type as type, ID(source) as sourceNodeId, target as targetNode")
+           "CALL apoc.create.relationship(source, $type, {}, target) YIELD rel " +
+           "RETURN id(rel) as relationshipId, $type as type, ID(source) as sourceNodeId, ID(target) as targetNodeId")
     Relationship createRelationship(
             @Param("type") String type,
             @Param("sourceNodeId") Long sourceNodeId,
             @Param("targetNodeId") Long targetNodeId);
 
     @Query("MATCH (source)-[r]->(target) " +
-           "RETURN ID(r) as id, r.type as type, ID(source) as sourceNodeId, target as targetNode")
+           "RETURN id(r) as relationshipId, type(r) as type, ID(source) as sourceNodeId, ID(target) as targetNodeId")
     List<Relationship> findAllRelationships();
 
     @Query("MATCH (source)-[r]->(target) WHERE ID(r) = $id " +
-           "RETURN ID(r) as id, r.type as type, ID(source) as sourceNodeId, target as targetNode")
+           "RETURN id(r) as relationshipId, type(r) as type, ID(source) as sourceNodeId, ID(target) as targetNodeId")
     Optional<Relationship> findRelationshipById(@Param("id") Long id);
 
     @Query("MATCH (source)-[r]->(target) WHERE ID(r) = $id " +
@@ -34,8 +34,8 @@ public interface RelationshipRepository extends Neo4jRepository<Relationship, Lo
            "WITH source, target " +
            "MATCH (newSource) WHERE ID(newSource) = $sourceNodeId " +
            "MATCH (newTarget) WHERE ID(newTarget) = $targetNodeId " +
-           "CREATE (newSource)-[newR:RELATED {type: $type}]->(newTarget) " +
-           "RETURN ID(newR) as id, newR.type as type, ID(newSource) as sourceNodeId, newTarget as targetNode")
+           "CREATE (newSource)-[newR:" + "RELATED {type: $type}]->(newTarget) " +
+           "RETURN id(newR) as relationshipId, $type as type, ID(newSource) as sourceNodeId, ID(newTarget) as targetNodeId")
     Relationship updateRelationship(
             @Param("id") Long id,
             @Param("type") String type,

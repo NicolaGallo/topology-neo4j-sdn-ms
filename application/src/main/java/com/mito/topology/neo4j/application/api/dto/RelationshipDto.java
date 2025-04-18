@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class RelationshipDto {
-    private Long id;
+    private Long id;  // Questo sarà mappato da relationshipId
     private String type;
     private Long sourceNodeId;
     private Long targetNodeId;
